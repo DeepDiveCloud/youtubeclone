@@ -1,15 +1,29 @@
-pipline {
+pipeline {
     agent any
-    stages{
-        stage("checkout"){
-            steps{
+    tools {
+      nodejs '20.7.0'
+    }
+    stages {
+        stage("check out"){
+            steps {
                 checkout scm
             }
         }
-        stage("npm"){
-            staps{
-                sh 'sudo npm install'
+        stage('print versions') {
+          steps {
+            sh 'npm version'
+          }
+        }
+        stage('Install') { 
+            steps {
+              sh 'npm install'
             }
         }
+        stage('Build') { 
+            steps {
+                sh 'npm run build' 
+            }
+        }
+        
     }
 }
