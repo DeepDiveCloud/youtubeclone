@@ -16,6 +16,7 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/DeepDiveCloud/youtubeclone.git'
         }
+    }
         
         stage('OWASP FS SCAN') {
             steps {
@@ -49,4 +50,4 @@ pipeline {
         }
     }
   }
-}
+
