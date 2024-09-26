@@ -1,34 +1,51 @@
 pipeline {
     agent any
-
-    stages {
-        stage("check version")  {
-            steps {
-                sh "node --version"
-                sh "npm --version"
-            }
-        }
-        stage('Build') { 
-            steps {
-                sh 'npm install' 
-            } 
-        }
-        stage('Static code analysis: Sonarqube'){
-            steps{
-               script{
-                   def SonarQubecredentialsId = 'sonarqube-api'
-                   statiCodeAnalysis(SonarQubecredentialsId)
-               }
-            }
-       }
-       stage('Quality Gate Status Check : Sonarqube'){
-            steps{
-               script{ 
-                   def SonarQubecredentialsId = 'sonarqube-api'
-                   QualityGateStatus(SonarQubecredentialsId)
-               }
-            }
-       }
+    
+    tools{
+        jdk 'jdk17'
+        nodejs 'node16'
         
+    }
+    
+    environment{
+        SCANNER_HOME= tool 'sonar-scanner'
+    }
+    
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/DeepDiveCloud/youtubeclone.git'
+        }
+        
+        stage('OWASP FS SCAN') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./app/backend --disableYarnAudit --disableNodeAudit', odcInstallation: 'DC'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        
+        stage('TRIVY FS SCAN') {
+            steps {
+                sh "trivy fs ."
+            }
+        }
+        
+        stage('SONARQUBE ANALYSIS') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh " $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Bank -Dsonar.projectKey=Bank "
+                }
+            }
+        }  
+         stage('Install Dependencies') {
+            steps {
+                sh "npm install"
+            }
+        }    
+        stage('Deploy to Conatiner') {
+            steps {
+                sh "npm run compose: up -d"
+            }
+        }
     }
 }
