@@ -3,7 +3,7 @@ pipeline{
     //
     tools{
         jdk 'jdk17'
-        nodejs 'nodejs16'
+        nodejs 'node16'
     }
    environment {
         SCANNER_HOME=tool 'sonar-scanner'
@@ -48,7 +48,7 @@ pipeline{
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                       sh "docker build — build-arg REACT_APP_RAPID_API_KEY=f3f24d5e22msh7a205a012674785p1b131fjsn8b7288a78e45 -t youtubev31."
+                       sh "docker build — build-arg REACT_APP_RAPID_API_KEY=f3f24d5e22msh7a205a012674785p1b131fjsn8b7288a78e45  youtubev31."
                        sh "docker tag youtubev31 maxjith/youtubev31:latest "
                        sh "docker push maxjith/youtubev31:latest "
                     }
