@@ -32,9 +32,27 @@ pipeline{
                 }
             }
         }
+        stage("quality gate"){
+           steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-api' 
+                }
+            } 
+        }
          stage('Install Dependencies') {
             steps {
                 sh "npm install"
+            }
+        }
+        stage("Docker Build &amp; Push"){
+            steps{
+                script{
+                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
+                       sh "docker build -t youtube ."
+                       sh "docker tag youtube maxjith/youtube:latest "
+                       sh "docker push maxjith/youtube:latest "
+                    }
+                }
             }
         }
     }
