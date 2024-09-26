@@ -27,7 +27,7 @@ pipeline{
         }
          stage('SONARQUBE ANALYSIS') {
             steps {
-                withSonarQubeEnv('sonar-api') {
+                withSonarQubeEnv('sonar-server') {
                     sh " $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=youtube -Dsonar.projectKey=youtube "
                 }
             }
@@ -35,7 +35,7 @@ pipeline{
         stage("quality gate"){
            steps {
                 script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-scanner' 
+                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-api' 
                 }
             } 
         }
@@ -44,15 +44,20 @@ pipeline{
                 sh "npm install"
             }
         }
-        stage("Docker Build &amp; Push"){
+        stage("Docker Build & Push"){
             steps{
                 script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker build -t youtube ."
+                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
+                       sh "docker build — build-arg REACT_APP_RAPID_API_KEY=f3f24d5e22msh7a205a012674785p1b131fjsn8b7288a78e45 -t youtube."
                        sh "docker tag youtube maxjith/youtube:latest "
                        sh "docker push maxjith/youtube:latest "
                     }
                 }
+            }
+        }
+        stage("TRIVY"){
+            steps{
+                sh "trivy image maxjith/youtube:latest > trivyimage.txt"
             }
         }
     }
