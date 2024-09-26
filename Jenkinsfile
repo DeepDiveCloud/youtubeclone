@@ -16,8 +16,7 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/DeepDiveCloud/youtubeclone.git'
         }
-    }
-        
+      } 
         stage('OWASP FS SCAN') {
             steps {
                 dependencyCheck additionalArguments: '--scan ./app/backend --disableYarnAudit --disableNodeAudit', odcInstallation: 'DC'
@@ -45,9 +44,8 @@ pipeline {
         }    
         stage('Deploy to Conatiner') {
             steps {
-                sh "npm run compose: up -d"
+                sh "npm run compose:up -d"
             }
         }
     }
-  }
-
+ }
