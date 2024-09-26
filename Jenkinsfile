@@ -24,6 +24,13 @@ pipeline{
             steps {
                 sh "trivy fs ."
             }
-        }                
+        }
+         stage('SONARQUBE ANALYSIS') {
+            steps {
+                withSonarQubeEnv('sonar-api') {
+                    sh " $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=yputube -Dsonar.projectKey=youtube "
+                }
+            }
+        }
     }
 }
