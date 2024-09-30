@@ -20,6 +20,11 @@ pipeline{
                     dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         } 
+        stage('Install Dependencies') {
+            steps {
+                sh "npm install"
+            }
+        }
         stage('TRIVY FS SCAN') {
             steps {
                 sh "trivy fs ."
@@ -39,11 +44,7 @@ pipeline{
                 }
             } 
         }
-         stage('Install Dependencies') {
-            steps {
-                sh "npm install"
-            }
-        }
+         
         stage("Docker Build & Push"){
             steps{
                 script{
