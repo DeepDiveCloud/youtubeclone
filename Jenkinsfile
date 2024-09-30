@@ -14,12 +14,11 @@ pipeline{
            git branch: 'main', url:'https://github.com/DeepDiveCloud/youtubeclone.git'
            }
         }
+           stage('OWASP FS SCAN') {
+         steps {
+              dependencyCheck additionalArguments: '--scan --disableYarnAudit --disableNodeAudit', odcInstallation: 'Dc'
+               dependencyCheckPublisher pattern: '**/dependency-checkreport.xml'
+           }
+       } 
     }
-    stage('OWASP FS SCAN') {
-            steps {
-                dependencyCheck additionalArguments: '--scan  --disableYarnAudit --disableNodeAudit', odcInstallation: 'Dc'
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        } 
-
 }
