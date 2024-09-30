@@ -16,11 +16,10 @@ pipeline{
         }
     }
     stage('OWASP FS SCAN') {
-         steps {
-              dependencyCheck additionalArguments: '--scan --disableYarnAudit --disableNodeAudit', odcInstallation: 'Dc'
-               dependencyCheckPublisher pattern: '**/dependency-checkreport.xml'
-           }
-    } 
-
+            steps {
+                dependencyCheck additionalArguments: '--scan  --disableYarnAudit --disableNodeAudit', odcInstallation: 'Dc'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        } 
 
 }
