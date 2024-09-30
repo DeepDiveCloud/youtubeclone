@@ -28,9 +28,3 @@ pipeline{
          
     }
 }
-              dependencyCheck additionalArguments: '--scan --disableYarnAudit --disableNodeAudit', odcInstallation: 'Dc'
-               dependencyCheckPublisher pattern: '**/dependency-checkreport.xml'
-           }
-       } 
-    }
-}
