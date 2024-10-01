@@ -22,6 +22,14 @@ pipeline{
                 sh "npm install"
             }
         }
+        stage('SONARQUBE ANALYSIS'){
+            steps {
+                def scannerHome = tool 'Sonar-Scanner';
+                withSonarQubeEnv() {
+                            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectNAME=youtubeclone -Dsonar.projectKey=youtubeclone"
+                         }
+                }
+        }
     }
 }
         
