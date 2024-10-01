@@ -14,7 +14,7 @@ pipeline{
     stage('OWASP FS SCAN') {
        steps { 
          dependencyCheck additionalArguments: '--scan --disableYarnAudit --disableNodeAudit', odcInstallation: 'Dependcy-check'
-         dependencyCheckPublisher pattern: ''**/dependency-checkreport.xml'
+         dependencyCheckPublisher pattern: '**/dependency-checkreport.xml'
        }
     }
   }
