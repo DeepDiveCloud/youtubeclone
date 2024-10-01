@@ -60,6 +60,11 @@ pipeline{
               sh "trivy image maxjith/youtubeclone:latest > trivyimage.txt"
             }
           }
+          stage('deployment'){
+            steps {
+              sh "docker run -d --name youtube -p 3000:3000 maxjith/youtubeclone:latest "
+            }
+          }
   }
 }
         
