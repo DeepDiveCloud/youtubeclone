@@ -5,6 +5,9 @@ pipeline{
         jdk 'jdk17'
         nodejs 'nodejs16'
     }
+    environment {
+           SCANNER_HOME=tool 'sonar-scanner'
+    }
     stages {
         stage('Checkout from Git'){
             steps{
@@ -22,13 +25,12 @@ pipeline{
                 sh "npm install"
             }
         }
-        stage('SONARQUBE ANALYSIS'){
+       stage('SONARQUBE ANALYSIS') {
             steps {
-                def scannerHome = tool 'Sonar-Scanner';
-                withSonarQubeEnv() {
-                            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectNAME=youtubeclone -Dsonar.projectKey=youtubeclone"
-                         }
+                withSonarQubeEnv('sonar-server') {
+                    sh " $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=youtubeclone -Dsonar.projectKey=youtubeclone "
                 }
+            }
         }
     }
 }
