@@ -38,7 +38,12 @@ pipeline{
                     waitForQualityGate abortPipeline: false, credentialsId: 'sonar-api'
                 }
               }
-         }  
+         } 
+         stage('Trivy fs scanning'){
+          steps {
+            sh "trivy fs ." 
+          }
+         }
    }
 }
         
