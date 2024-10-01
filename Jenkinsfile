@@ -48,7 +48,7 @@ pipeline{
           steps {
             script {
               withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                    sh "docker build --build-argREACT_APP_RAPID_API_KEY=f3f24d5e22msh7a205a012674785p1b131fjsn8b7288a78e45 . -t youtubeclone:latest"
+                    sh "docker build --build-arg REACT_APP_RAPID_API_KEY=f3f24d5e22msh7a205a012674785p1b131fjsn8b7288a78e45 . -t youtubeclone:latest"
                     sh "docker tag youtubeclone maxjith/youtubeclone:latest " 
                     sh "docker push maxjith/youtubeclone:latest " 
                       }
